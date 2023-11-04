@@ -38,4 +38,4 @@ imhist(img2);
 
 
 
-![image-20231101200623801](C:\Users\7878\AppData\Roaming\Typora\typora-user-images\image-20231101200623801.png)
+![image-20231101200623801](E:\hexo\1PHAN-7878.github.io\source\images\qg.jpg)
