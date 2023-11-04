@@ -38,4 +38,4 @@ imhist(img2);
 
 
 
-![image-20231101200623801](E:\hexo\1PHAN-7878.github.io\source\images\qg.jpg)
+![](../images/qg-1699076069906-1.jpg)
