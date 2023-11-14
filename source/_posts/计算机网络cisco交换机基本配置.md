@@ -257,7 +257,7 @@ line vty 5 15
 !
 ```
 
-```
+```bash
 version 12.1: 这一行指定了配置文件所使用的Cisco IOS软件的版本。
 
 no service timestamps log datetime msec 和 no service timestamps debug datetime msec: 这两行命令禁用了日志和调试信息中的时间戳，并且不包括毫秒级别的时间信息。这可以使日志文件更加简洁。
