@@ -490,3 +490,238 @@ var timestamp = currentDate.getTime(); // 获取表示当前时间的时间戳�
     </div>
 ```
 
+# BOM
+
+## 3.1 Window
+
+1. **全局作用域：** 在浏览器环境中，所有全局声明的变量和函数都成为 `window` 对象的属性和方法。这意味着您可以通过 `window` 对象访问全局作用域中的任何变量或函数。
+
+   ```javascript
+   var globalVariable = 42;
+   console.log(window.globalVariable); // 输出: 42
+   ```
+
+2. **浏览器窗口控制：** `window` 对象提供了许多方法来控制和操作浏览器窗口，比如打开新窗口、关闭窗口、调整窗口大小等。
+
+   ```javascript
+   window.open("https://www.example.com", "_blank"); // 打开新窗口
+   window.close(); // 关闭当前窗口
+   window.resizeTo(800, 600); // 调整窗口大小
+   ```
+
+3. **定时器和间歇调用：** `window` 对象提供了 `setTimeout` 和 `setInterval` 方法，用于执行函数或代码片段的定时调用。
+
+   ```javascript
+   setTimeout(function() {
+       console.log("Delayed message");
+   }, 2000);
+   
+   setInterval(function() {
+       console.log("Repeated message every 1 second");
+   }, 1000);
+   ```
+
+4. **提示框和对话框：** `window` 对象提供了 `alert`、`confirm` 和 `prompt` 等方法，用于显示提示框和对话框，与用户进行交互。
+
+   ```javascript
+   alert("This is an alert message");
+   
+   var userConfirmed = confirm("Do you want to proceed?");
+   
+   var userInput = prompt("Please enter your name:", "John Doe");
+   ```
+
+5. **导航和位置信息：** `window` 对象包含有关当前文档和浏览器位置的信息，例如当前的 URL、浏览器的历史记录等。
+
+   ```javascript
+   console.log(window.location.href); // 当前页面的 URL
+   console.log(window.history.length); // 浏览器历史记录的长度
+   ```
+
+## 3.2 Navigator
+
+1. **`navigator.userAgent`：** 包含有关浏览器用户代理的字符串，其中包含有关浏览器名称、版本和操作系统的信息。
+
+   ```javascript
+   var userAgentString = navigator.userAgent;
+   console.log(userAgentString);
+   ```
+
+2. **`navigator.appName`：** 返回浏览器的名称，通常是 "Netscape"。
+
+   ```javascript
+   var browserName = navigator.appName;
+   console.log(browserName);
+   ```
+
+3. **`navigator.appVersion`：** 返回包含有关浏览器版本的字符串。
+
+   ```javascript
+   var browserVersion = navigator.appVersion;
+   console.log(browserVersion);
+   ```
+
+4. **`navigator.platform`：** 返回浏览器运行的操作系统平台。
+
+   ```javascript
+   var platform = navigator.platform;
+   console.log(platform);
+   ```
+
+5. **`navigator.language`：** 返回用户浏览器的首选语言。
+
+   ```javascript
+   var language = navigator.language;
+   console.log(language);
+   ```
+
+## 3.3 Screen
+
+`screen` 对象是 JavaScript 中的全局对象之一，表示用户的屏幕。`screen` 对象提供了有关用户屏幕的信息，如屏幕的宽度、高度、可见区域的宽度和高度等。以下是一些 `screen` 对象的常用属性：
+
+1. **`screen.width`：** 返回屏幕的宽度（以像素为单位）。
+
+   ```JavaScript
+   var screenWidth = screen.width;
+   console.log(screenWidth);
+   ```
+
+2. **`screen.height`：** 返回屏幕的高度（以像素为单位）。
+
+   ```JavaScript
+   var screenHeight = screen.height;
+   console.log(screenHeight);
+   ```
+
+3. **`screen.availWidth`：** 返回屏幕可用的宽度，即减去任务栏等系统元素后的宽度。
+
+   ```JavaScript
+   var availableScreenWidth = screen.availWidth;
+   console.log(availableScreenWidth);
+   ```
+
+4. **`screen.availHeight`：** 返回屏幕可用的高度，即减去任务栏等系统元素后的高度。
+
+   ```JavaScript
+   var availableScreenHeight = screen.availHeight;
+   console.log(availableScreenHeight);
+   ```
+
+## 3.4 History
+
+`history` 对象是 JavaScript 中的一个内置对象，提供了对浏览器窗口历史记录的访问和操作。通过 `history` 对象，您可以在用户的浏览历史中向前或向后导航，以及操作历史记录的状态。以下是一些 `history` 对象的常用方法和属性：
+
+常用方法：
+
+1. **`history.back()`：** 向后导航，等效于用户点击浏览器的后退按钮。
+
+   ```javascript
+   history.back();
+   ```
+
+2. **`history.forward()`：** 向前导航，等效于用户点击浏览器的前进按钮。
+
+   ```JavaScript
+   history.forward();
+   ```
+
+3. **`history.go(number)`：** 导航到指定的历史记录条目，`number` 参数可以是正数（向前导航）或负数（向后导航）。
+
+   ```JavaScript
+   // 向前导航两步
+   history.go(2);
+   
+   // 向后导航一步
+   history.go(-1);
+   ```
+
+## 3.5 location
+
+1. **`location.assign(url)`：** 加载新的 URL，与设置 `window.location.href = url` 效果相同。
+
+   ```JavaScript
+   location.assign("https://www.example.com");
+   ```
+
+2. **`location.reload()`：** 重新加载当前页面。
+
+   ```JavaScript
+   location.reload();
+   ```
+
+3. **`location.replace(url)`：** 用新的 URL 替换当前页面，不会在浏览历史中留下记录。
+
+   ```JavaScript
+   location.replace("https://www.example.com");
+   ```
+
+## 3.6 弹出框
+
+1. **`alert()`：** 弹出警告框，用于向用户显示一条消息，并等待用户点击“确定”按钮。这种对话框只有一个按钮。
+
+   ```JavaScript
+   alert("This is an alert message!");
+   ```
+
+2. **`confirm()`：** 弹出确认框，用于向用户显示一条消息，并等待用户点击“确定”或“取消”按钮。这种对话框有两个按钮。
+
+   ```JavaScript
+   var userConfirmed = confirm("Do you want to proceed?");
+   if (userConfirmed) {
+       // 用户点击了确定按钮
+   } else {
+       // 用户点击了取消按钮
+   }
+   ```
+
+## 3.7 计时器
+
+JavaScript 提供了两种类型的计时器：`setTimeout` 和 `setInterval`，它们都用于在一定的时间间隔后执行指定的代码。以下是这两种计时器的基本用法：
+
+### `setTimeout`
+
+`setTimeout` 用于在指定的延迟时间后执行一次性的代码。
+
+```JavaScript
+// 示例：在2秒后执行一次性的代码
+setTimeout(function() {
+    console.log("This code will be executed after 2000 milliseconds (2 seconds).");
+}, 2000);
+```
+
+### `setInterval`
+
+`setInterval` 用于在指定的时间间隔内重复执行指定的代码。
+
+```JavaScript
+// 示例：每隔1秒执行一次代码
+var intervalId = setInterval(function() {
+    console.log("This code will be executed every 1000 milliseconds (1 second).");
+}, 1000);
+```
+
+### 清除计时器
+
+可以使用 `clearTimeout` 和 `clearInterval` 来取消相应的计时器。
+
+```JavaScript
+// 使用 setTimeout 创建一个计时器，并立即取消它
+var timeoutId = setTimeout(function() {
+    console.log("This code will not be executed.");
+}, 1000);
+
+clearTimeout(timeoutId);
+
+// 使用 setInterval 创建一个计时器，并在5秒后取消它
+var counter = 0;
+var intervalId = setInterval(function() {
+    console.log("This code will be executed every second.");
+    counter++;
+    if (counter >= 5) {
+        clearInterval(intervalId);
+        console.log("Interval canceled after 5 seconds.");
+    }
+}, 1000);
+```
+
+请注意，`setTimeout` 和 `setInterval` 返回的是计时器的标识符，可以用于后续取消计时器。`clearTimeout` 用于取消 `setTimeout` 创建的计时器，而 `clearInterval` 用于取消 `setInterval` 创建的计时器。
