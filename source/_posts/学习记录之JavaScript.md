@@ -725,3 +725,4 @@ var intervalId = setInterval(function() {
 ```
 
 请注意，`setTimeout` 和 `setInterval` 返回的是计时器的标识符，可以用于后续取消计时器。`clearTimeout` 用于取消 `setTimeout` 创建的计时器，而 `clearInterval` 用于取消 `setInterval` 创建的计时器。
+

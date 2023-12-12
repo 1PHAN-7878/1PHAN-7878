@@ -201,3 +201,281 @@ function changeDiv2(){
     </script>
 ```
 
+## 练习二
+
+![image-20231212103816156](../images/image-20231212103816156.png)
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="pic1" onclick="f1()">这个是图片1</button>
+    <button id="pic2" onclick="f2()">这个是图片2</button>
+    <img src="./pic1.png" alt="图片一" width="300px" height="300px" id="pic">
+    <script>
+        function f1(){
+            img1 = document.getElementById("pic");
+            img1.src = "./pic1.png";
+        }
+        function f2(){
+            img2 = document.getElementById("pic");
+            img2.src = "./pic2.png";
+        }
+    </script>
+</body>
+</html>
+```
+
+# 样式
+
+1. **直接修改样式属性：**
+
+   ```JavaScript
+   // 获取元素
+   var myElement = document.getElementById("myElement");
+   
+   // 直接修改样式属性
+   myElement.style.color = "red";
+   myElement.style.fontSize = "16px";
+   ```
+
+2. **使用`setProperty`方法：**
+
+   ```JavaScript
+   // 获取元素
+   var myElement = document.getElementById("myElement");
+   
+   // 使用 setProperty 方法设置样式属性
+   myElement.style.setProperty("color", "blue");
+   ```
+
+3. **通过`cssText`属性设置多个样式：**
+
+   ```JavaScript
+   // 获取元素
+   var myElement = document.getElementById("myElement");
+   
+   // 使用 cssText 属性设置多个样式
+   myElement.style.cssText = "color: green; font-size: 18px;";
+   ```
+
+4. **动态添加和移除CSS类：**
+
+   ```JavaScript
+   // 获取元素
+   var myElement = document.getElementById("myElement");
+   
+   // 添加CSS类
+   myElement.classList.add("newClass");
+   
+   // 移除CSS类
+   myElement.classList.remove("oldClass");
+   ```
+
+## 练习三
+
+![image-20231212110251773](../images/image-20231212110251773.png)
+
+![image-20231212110241198](../images/image-20231212110241198.png)
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table id="table">
+        <tr style="background-color: blue;" class="tr1">
+            
+            <td>id</td>
+            <td>姓名</td>
+            <td>血量</td>
+            <td>伤害</td>
+        </tr>
+        <tr class="tr2">
+            <td>1</td>
+            <td>gareen</td>
+            <td>300</td>
+            <td>5</td>
+        </tr>
+        <tr class="tr1">
+            <td>2</td>
+            <td>teemo</td>
+            <td>200</td>
+            <td>10</td>
+        </tr>
+        <tr class="tr2">
+            <td>3</td>
+            <td>teemo</td>
+            <td>100</td>
+            <td>15</td>
+        </tr>
+    </table>
+    <script>
+        var table = document.getElementById("table");
+        console.log(document.childNodes);
+        
+        var tr1 = document.getElementsByClassName("tr1");
+        tr1 = Array.from(tr1);
+        tr1.forEach(function(element) {
+            element.style.cssText = "background-color: blue;";
+        });
+        
+        var tr2 = document.getElementsByClassName("tr2");
+        tr2 = Array.from(tr2);
+        tr2.forEach(function(element) {
+            element.style.cssText = "background-color: green;";
+        });
+    </script>
+</body>
+</html>
+```
+
+![image-20231212110919351](../images/image-20231212110919351.png)
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table id="table" style="border-collapse: collapse;
+    align-content: center;">
+        <tr style="background-color: blue;" class="tr1">
+            
+            <td>id</td>
+            <td>姓名</td>
+            <td>血量</td>
+            <td>伤害</td>
+        </tr>
+        <tr class="tr2">
+            <td>1</td>
+            <td>gareen</td>
+            <td>300</td>
+            <td>5</td>
+        </tr>
+        <tr class="tr1">
+            <td>2</td>
+            <td>teemo</td>
+            <td>200</td>
+            <td>10</td>
+        </tr>
+        <tr class="tr2">
+            <td>3</td>
+            <td>teemo</td>
+            <td>100</td>
+            <td>15</td>
+        </tr>
+    </table>
+    <script>
+        var tag = document.getElementsByTagName("tr");
+        for(var i = 0; i < tag.length; i+=2){
+            tag[i].style.backgroundColor = "gray";
+        }
+    </script>
+</body>
+</html>
+```
+
+# 事件
+
+DOM（文档对象模型）中有许多事件，它们是与 HTML 元素相关联的行为或状态的表示。以下是一些常用的 DOM 事件：
+
+1. **点击事件（click）：** 当用户点击某个元素时触发。
+2. **鼠标移入事件（mouseover）：** 当鼠标指针移动到某个元素上方时触发。
+3. **鼠标移出事件（mouseout）：** 当鼠标指针从某个元素移开时触发。
+4. **双击事件（dblclick）：** 当用户双击某个元素时触发。
+5. **键盘按下事件（keydown）：** 当用户按下键盘上的任意键时触发。
+6. **键盘释放事件（keyup）：** 当用户释放键盘上的按键时触发。
+7. **表单提交事件（submit）：** 当用户提交表单时触发。
+8. **输入框失去焦点事件（blur）：** 当元素失去焦点时触发。
+9. **输入框获得焦点事件（focus）：** 当元素获得焦点时触发。
+10. **窗口加载事件（load）：** 当页面加载完成时触发。
+11. **窗口改变大小事件（resize）：** 当窗口大小改变时触发。
+12. **滚动事件（scroll）：** 当用户滚动页面时触发。
+13. **鼠标按下事件（mousedown）：** 当鼠标按钮被按下时触发。
+14. **鼠标释放事件（mouseup）：** 当鼠标按钮被释放时触发。
+15. **鼠标移动事件（mousemove）：** 当鼠标指针在元素上移动时触发。
+
+## 练习
+
+![image-20231212111852358](../images/image-20231212111852358.png)
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    
+div{
+    display: none;
+}
+ a{
+    display: none;
+    /* display: block; */
+    font-size: 14px;
+    font-family: 宋体;
+    color: gray;
+    text-decoration: none;   
+    padding: 10px 0px 10px 0px;
+}
+</style>
+<body>
+    <span id="sp1" onmouseover="dips('menu1')" onmouseleave="disappare('menu1')">武器</span>
+    <span id="sp2" onmouseover="dips('menu2')" onmouseleave="disappare('menu2')">护甲</span>
+    <span id="sp3" onmouseover="dips('menu3')" onmouseleave="disappare('menu3')">英雄</span>
+    <div id="menu1">
+        <a href="">大剑</a>
+        <a href="">斧子</a>
+        <a href="">牛魔</a>
+    </div>
+    <div id="menu2">
+        <a href="">胸甲</a>
+        <a href="">护腕</a>
+        <a href="">头盔</a>
+    </div>
+    <div id="menu3">
+        <a href="">盖伦</a>
+        <a href="">提莫</a>
+        <a href="">果汁</a>
+    </div>
+    <script>
+        function dips(name = "menu1"){
+            var menu = document.getElementById(name);
+            menu.style.display = "block";
+    
+            console.log(menu.childElementCount);
+            Array.from(menu.children).forEach(function(element){
+                element.style.display = "block";
+            });
+        }
+        function disappare(name = 'menu1'){
+            var menu = document.getElementById(name);
+            menu.style.display = "none";
+    
+            console.log(menu.childElementCount);
+            Array.from(menu.children).forEach(function(element){
+                element.style.display = "none";
+            });
+        }
+        
+    </script>
+</body>
+</html>
+```
+
