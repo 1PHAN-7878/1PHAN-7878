@@ -401,12 +401,13 @@ DOM（文档对象模型）中有许多事件，它们是与 HTML 元素相关�
 7. **表单提交事件（submit）：** 当用户提交表单时触发。
 8. **输入框失去焦点事件（blur）：** 当元素失去焦点时触发。
 9. **输入框获得焦点事件（focus）：** 当元素获得焦点时触发。
-10. **窗口加载事件（load）：** 当页面加载完成时触发。
-11. **窗口改变大小事件（resize）：** 当窗口大小改变时触发。
-12. **滚动事件（scroll）：** 当用户滚动页面时触发。
-13. **鼠标按下事件（mousedown）：** 当鼠标按钮被按下时触发。
-14. **鼠标释放事件（mouseup）：** 当鼠标按钮被释放时触发。
-15. **鼠标移动事件（mousemove）：** 当鼠标指针在元素上移动时触发。
+10. **输入框内容改变**：记得表单中元素，使用value属性获取。
+11. **窗口加载事件（load）：** 当页面加载完成时触发。
+12. **窗口改变大小事件（resize）：** 当窗口大小改变时触发。
+13. **滚动事件（scroll）：** 当用户滚动页面时触发。
+14. **鼠标按下事件（mousedown）：** 当鼠标按钮被按下时触发。
+15. **鼠标释放事件（mouseup）：** 当鼠标按钮被释放时触发。
+16. **鼠标移动事件（mousemove）：** 当鼠标指针在元素上移动时触发。
 
 ## 练习
 
@@ -477,5 +478,324 @@ div{
     </script>
 </body>
 </html>
+```
+
+![image-20231214162822952](../images/image-20231214162822952.png)
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .ok {
+            color: green;
+            display: none;
+            font-size: 20px;
+        }
+
+        .nook {
+            color: red;
+            display: none;
+            font-size: 20px;
+        }
+
+        #username {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+
+        <input type="text" name="username" id="username" width="200px" oninput="f1()" onblur="f2()">
+    </div>
+    
+        <span class="ok">用户名可以使用</span>
+        <span class="nook">用户名不可以使用</span>
+    
+    <script>
+
+        function f1() {
+            var username = document.getElementById("username");
+            var s = username.value;
+            var ok = document.getElementsByClassName("ok");
+            var nook = document.getElementsByClassName("nook");
+            console.log(s);
+            if (s != null && s[0] != 'a') {
+                Array.from(nook).forEach(function (element) {
+                    element.style.display = 'none';
+                });
+                Array.from(ok).forEach(function (element) {
+                    element.style.display = 'inline';
+                });
+                
+            } else {
+                Array.from(ok).forEach(function (element) {
+                    element.style.display = 'none';
+                });
+                Array.from(nook).forEach(function (element) {
+                    element.style.display = 'inline';
+                });
+                
+            }
+        }
+        function f2() {
+            var username = document.getElementById("username");
+            var s = username.value;
+            var ok = document.getElementsByClassName("ok");
+            var nook = document.getElementsByClassName("nook");
+            if (s == null || s[0] != 'a') {
+                Array.from(ok).forEach(function (element) {
+                    element.style.display = 'none';
+                });
+                Array.from(nook).forEach(function (element) {
+                    element.style.display = 'none';
+                });
+            } else {
+                Array.from(ok).forEach(function (element) {
+                    element.style.display = 'none';
+                });
+                Array.from(nook).forEach(function (element) {
+                    element.style.display = 'inline';
+                });
+            }
+        }
+
+    </script>
+</body>
+
+</html>
+```
+
+
+
+# 创建节点
+
+`createELement`
+
+在JavaScript中，可以使用以下步骤创建DOM对象并使用：
+
+1. **创建元素节点：** 使用 `document.createElement` 方法创建一个新的元素节点。
+
+   ```JavaScript
+   var newElement = document.createElement('div');
+   ```
+
+2. **设置元素属性：** 使用 `element.setAttribute` 方法设置元素的属性。
+
+   ```JavaScript
+   newElement.setAttribute('id', 'myElement');
+   newElement.setAttribute('class', 'myClass');
+   ```
+
+3. **设置元素内容：** 使用 `element.innerHTML` 或 `element.textContent` 设置元素的内容。
+
+   ```JavaScript
+   newElement.innerHTML = 'This is a new element!';
+   ```
+
+4. **将元素添加到文档中：** 使用 `document.appendChild` 或其他 DOM 操作方法将新元素添加到文档中。
+
+   ```JavaScript
+   document.body.appendChild(newElement);
+   ```
+
+## 练习
+
+![image-20231218093518803](../images/image-20231218093518803.png)
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .mytable {
+            border-collapse: collapse;
+        }
+
+        td {
+            width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="div">
+    </div>
+    <script>
+        var div = document.getElementById("div");
+        var newTable = document.createElement("table");
+        newTable.setAttribute("id", "mytable");
+        newTable.setAttribute("class", "mytable");
+        div.appendChild(newTable);
+
+        var newtr = document.createElement("tr");
+        newtr.setAttribute("class", "tr");
+        newtr.style.cssText = "border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: lightgray;height: 35px;";
+
+        var newtd1 = document.createElement("td");
+        newtd1.textContent = "id";
+        newtd1.style.textAlign = "center";
+        newtr.appendChild(newtd1);
+        var newtd2 = document.createElement("td");
+        newtd2.textContent = "名称";
+        newtd2.style.textAlign = "center";
+        newtr.appendChild(newtd2);
+        var newtd3 = document.createElement("td");
+        newtd3.textContent = "血量";
+        newtd3.style.textAlign = "center";
+        newtr.appendChild(newtd3);
+        var newtd4 = document.createElement("td");
+        newtd4.textContent = "伤害";
+        newtd4.style.textAlign = "center";
+        newtr.appendChild(newtd4);
+        newTable.appendChild(newtr);
+
+        newTable.appendChild(document.createElement('br'));
+        var newtr = document.createElement("tr");
+        newtr.setAttribute("class", "tr");
+        newtr.style.cssText = "border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: lightgray;height: 35px;";
+
+        var newtd1 = document.createElement("td");
+        newtd1.textContent = "1";
+        newtd1.style.textAlign = "center";
+        newtr.appendChild(newtd1);
+        var newtd2 = document.createElement("td");
+        newtd2.textContent = "gareen";
+        newtd2.style.textAlign = "center";
+        newtr.appendChild(newtd2);
+        var newtd3 = document.createElement("td");
+        newtd3.textContent = "340";
+        newtd3.style.textAlign = "center";
+        newtr.appendChild(newtd3);
+        var newtd4 = document.createElement("td");
+        newtd4.textContent = "58";
+        newtd4.style.textAlign = "center";
+        newtr.appendChild(newtd4);
+        newTable.appendChild(newtr);
+
+    </script>
+
+</body>
+
+</html>
+```
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .mytable {
+            border-collapse: collapse;
+        }
+
+        td {
+            width: 200px;
+            text-align: center;
+            border-bottom: 1px solid lightgray;
+            height: 35px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="div">
+    </div>
+    <script>
+        var div = document.getElementById("div");
+        var newTable = document.createElement("table");
+        newTable.setAttribute("id", "mytable");
+        newTable.setAttribute("class", "mytable");
+        div.appendChild(newTable);
+
+        var headers = ["id", "名称", "血量", "伤害"];
+        var data = [
+            ["1", "gareen", "340", "58"]
+        ];
+
+        var headerRow = newTable.insertRow();
+        headers.forEach(function(header) {
+            var th = document.createElement("th");
+            th.textContent = header;
+            headerRow.appendChild(th);
+        });
+
+        data.forEach(function(rowData) {
+            var row = newTable.insertRow();
+            rowData.forEach(function(cellData) {
+                var cell = row.insertCell();
+                cell.textContent = cellData;
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
+
+```
+
+# 删除节点
+
+1. `parentNode.removeChild(childNode)`: 这个方法让您能够通过其父节点删除一个子节点。
+
+```javascript
+var childNode = document.getElementById("myElement");
+childNode.parentNode.removeChild(childNode);
+```
+
+1. `remove()`: 这是一种更简洁的方法，直接从DOM中删除元素。
+
+```javascript
+var element = document.getElementById("myElement");
+element.remove();
+```
+
+## 练习
+
+![image-20231218095734262](../images/image-20231218095734262.png)
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="f1()">点击加载js</button>
+    <script>
+        function f1(){
+            var newScript = document.createElement("script");
+            newScript.setAttribute("src", "1.js");
+            document.body.append(newScript);
+        }
+
+    </script>
+</body>
+</html>
+```
+
+```javascript
+var button = document.getElementById("button");
+button.onclick = function(){
+    f1();
+};
 ```
 
