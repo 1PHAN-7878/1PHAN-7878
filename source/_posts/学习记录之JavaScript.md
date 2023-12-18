@@ -10,7 +10,7 @@ tags: 前端
 
 ## 1.1 输出
 
-```javascript
+```html
 <script>
   document.write("Hello Javascript");
 </script>
@@ -24,7 +24,7 @@ javascript代码必须放在script标签中
 
 script标签可以放在html的任何地方，一般建议放在head标签里
 
-```javascript
+```html
 <html>
   <script src="https://how2j.cn/study/hello.js"></script>
 </html>
@@ -34,7 +34,7 @@ script标签可以放在html的任何地方，一般建议放在head标签里
 
 类似c/c++，
 
-```javascript
+```html
 <script>
     //单行注释
     /*
@@ -48,7 +48,7 @@ script标签可以放在html的任何地方，一般建议放在head标签里
 
 使用或不适用var声明
 
-```javascript
+```html
 <script>
   var x = 10;
   document.write("变量x的值:"+x);
