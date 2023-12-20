@@ -799,3 +799,43 @@ button.onclick = function(){
 };
 ```
 
+# 练习
+
+![image-20231219113230774](../images/image-20231219113230774.png)
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <span>账号：</span>
+        <input type="text" name="account" id="account">
+    </div>
+    <div>
+        <span>密码：</span>
+        <input type="password" name="password" id="password">
+
+    </div>
+    <button onclick="f1()">提交</button>
+    <script>
+        function f1(){
+            var account = document.getElementById("account").value;
+            var password = document.getElementById("password").value;
+            if(account == "" || password == ""){
+                alert("有空的，不彳");
+            }else{
+                alert("可以了");
+                location.reload();
+            }
+        }
+
+    </script>
+</body>
+</html>
+```
+
