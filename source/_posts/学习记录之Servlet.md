@@ -283,3 +283,610 @@ public class tiaozhuan extends HttpServlet {
 
 # servlet配合JDBC的使用案例
 
+## 制作查询
+
+英雄类的创建
+
+```java
+package com.example.newgzwithjdbc;
+
+public class Hero {
+    private  int id;
+    private String name;
+    private float hp;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public float getHp() {
+        return hp;
+    }
+
+    public void setHp(float hp) {
+        this.hp = hp;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    private int damage;
+
+}
+
+```
+
+数据库链接
+
+```java
+package com.example.newgzwithjdbc;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class HeroDao {
+    public HeroDao() {
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+    }
+
+    public Connection getConnection() throws SQLException{
+        return DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1:3306/db_hero?characterEncoding=UTF-8",
+                "root", "");	//密码就不放了
+    }
+    /**
+     * 获取数量
+     *
+     * */
+    public int getTotal(){
+        int total = 0;
+        try(Connection c = getConnection(); Statement s = c.createStatement()){
+            String sql = "select count(*) from hero";
+            ResultSet rs = s.executeQuery(sql);
+            while(rs.next()){
+                total = rs.getInt(1);
+            }
+            System.out.println("total:" + total);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return total;
+    }
+    /**
+     * 插入新英雄
+     *
+     * */
+    public void addHero(Hero hero){
+        String sql = "insert into hero values(null,?,?,?)";
+        try(Connection c =getConnection(); PreparedStatement s = c.prepareStatement(sql);){
+            s.setString(1, hero.getName());
+            s.setFloat(2, hero.getHp());
+            s.setInt(3, hero.getDamage());
+
+            s.execute();
+
+            ResultSet rs = s.getGeneratedKeys();
+            if(rs.next()){
+                int id = rs.getInt(1);
+                hero.setId(id);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 更新操作
+     *
+     * */
+    public void updateHero(Hero hero){
+        String sql = "update hero set name= ?, hp = ?, damage = ? where id = ?";
+        try(Connection c = getConnection(); PreparedStatement s = c.prepareStatement(sql)){
+            s.setString(1, hero.getName());
+            s.setFloat(2, hero.getHp());
+            s.setInt(3, hero.getDamage());
+            s.setInt(4, hero.getId());
+
+            s.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 删除英雄
+     *
+     * */
+    public void deleteHero(int id){
+        try(Connection c = getConnection(); Statement s = c.createStatement();){
+            String  sql = "delete from hero where id = " + id;
+            s.execute(sql);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    /*
+    * 获取英雄
+    *
+    *
+    * */
+    public Hero get(int id) {
+        Hero hero = null;
+
+        try (Connection c = getConnection(); Statement s = c.createStatement();) {
+
+            String sql = "select * from hero where id = " + id;
+
+            ResultSet rs = s.executeQuery(sql);
+
+            if (rs.next()) {
+                hero = new Hero();
+                String name = rs.getString(2);
+                float hp = rs.getFloat("hp");
+                int damage = rs.getInt(4);
+                hero.setName(name);
+                hero.setHp(hp);
+                hero.setDamage(damage);
+                hero.setId(id);
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+        return hero;
+    }
+
+    public List<Hero> list() {
+        return list(0, Short.MAX_VALUE);
+    }
+
+    public List<Hero> list(int start, int count) {
+        List<Hero> heros = new ArrayList<Hero>();
+
+        String sql = "select * from hero order by id desc limit ?,? ";
+
+        try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {
+
+            ps.setInt(1, start);
+            ps.setInt(2, count);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Hero hero = new Hero();
+                int id = rs.getInt(1);
+                String name = rs.getString(2);
+                float hp = rs.getFloat("hp");
+                int damage = rs.getInt(4);
+                hero.setName(name);
+                hero.setHp(hp);
+                hero.setDamage(damage);
+                hero.setId(id);
+                heros.add(hero);
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+        return heros;
+    }
+
+
+
+}
+
+```
+
+页面
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>111</title>
+</head>
+<body>
+    <div style="color: green">这是数据</div>
+    <form action="firstpage" method="post">
+        <button>这是按钮</button>
+    </form>
+
+</body>
+</html>
+```
+
+相应页面的servlet
+
+```java
+package com.example.newgzwithjdbc;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.util.List;
+
+public class HelloListServlet extends HttpServlet {
+    HeroDao heroDao = new HeroDao();
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+       List<Hero> heros = heroDao.list();
+
+       StringBuffer sb = new StringBuffer();
+       sb.append("<table align='center' border='1' cellspacing='0'>\r\n");
+       sb.append("<tr><td>id</td><td>name</td><td>hp</td><td>damage</td></tr>\r\n");
+       String trFormat = "<tr><td>%d</td><td>%s</td><td>%f</td><td>%d</td></tr>\r\n";
+       for(Hero hero: heros){
+           String tr = String.format(trFormat, hero.getId(), hero.getName(), hero.getHp(), hero.getDamage());
+            sb.append(tr);
+       }
+       sb.append("</table>");
+       resp.getWriter().print(sb.toString());
+    }
+}
+```
+
+进行xml映射
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+    <servlet>
+        <servlet-name>HelloListServlet</servlet-name>
+        <servlet-class>com.example.newgzwithjdbc.HelloListServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>HelloListServlet</servlet-name>
+        <url-pattern>/firstpage</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>firstpage.html</welcome-file>
+    </welcome-file-list>
+</web-app>
+```
+
+最终可以看到效果
+
+![image-20231222094945598](../images/image-20231222094945598.png)
+
+![image-20231222094953549](../images/image-20231222094953549.png)
+
+## 英雄增加
+
+准备要使用的英雄添加页面
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>addhero</title>
+</head>
+<body>
+  <form method="post" action="addhero">
+    <span>姓名：</span>
+    <input type="text" name="name">
+    <span>HP：</span>
+    <input type="text" name="hp">
+    <span>DAMAGE：</span>
+    <input type="number" name="damage">
+    <button type="submit" name="btn">
+      提交
+    </button>
+  </form>
+</body>
+</html>
+```
+
+编写调addhero的action的servlet
+
+```java
+package com.example.newgzwithjdbc;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
+public class HeroAddServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Hero hero = new Hero();
+        hero.setName(req.getParameter("name"));
+        hero.setHp(Float.parseFloat(req.getParameter("hp")));
+        hero.setDamage(Integer.parseInt(req.getParameter("damage")));
+
+        HeroDao heroDao = new HeroDao();
+        heroDao.addHero(hero);
+        System.out.println(hero.getName());
+        System.out.println(hero.getHp());
+        System.out.println(hero.getDamage());
+
+        resp.setContentType("text/html;charSet=UTF-8");
+        StringBuffer sb = new StringBuffer();
+        sb.append("<span>");
+        sb.append(hero.getName());
+        sb.append("</span>");
+        resp.getWriter().print(sb.toString());
+
+
+        try {
+            Thread.sleep(2);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        /*最后重定向的是当前的上下文的根目录*/
+        resp.sendRedirect(req.getContextPath()+ "/");
+
+    }
+}
+
+```
+
+添加xml配置
+
+```xml
+	<servlet>
+        <servlet-name>AddHeroServlet</servlet-name>
+        <servlet-class>com.example.newgzwithjdbc.HeroAddServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddHeroServlet</servlet-name>
+        <url-pattern>/addhero</url-pattern>
+    </servlet-mapping>
+```
+
+
+
+## 英雄删除
+
+修改展示的servlet，提供删除的超连接
+
+```java
+	String trFormat = "<tr><td>%d</td><td>%s</td><td>%f</td><td>%d</td>" +
+               "<td><a href='deleteHeroid?id=%d'>delete</a></td>" +
+               "</tr>\r\n";
+       for(Hero hero: heros){
+           String tr = String.format(trFormat, hero.getId(), hero.getName(), hero.getHp(), hero.getDamage(), hero.getId());
+            sb.append(tr);
+       }
+```
+
+编写点击超连接删除的servlet
+
+```java
+package com.example.newgzwithjdbc;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
+public class HeroDeleteServlet extends HttpServlet {
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+
+        new HeroDao().deleteHero(id);
+
+        resp.sendRedirect(req.getContextPath() + "/firstpage");
+    }
+}
+```
+
+在xml文件中实现配置
+
+```xml
+	<servlet>
+        <servlet-name>HeroDeleteServlet</servlet-name>
+        <servlet-class>com.example.newgzwithjdbc.HeroDeleteServlet</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>HeroDeleteServlet</servlet-name>
+        <url-pattern>/deleteHeroid</url-pattern>
+    </servlet-mapping>
+```
+
+## 英雄修改
+
+对于每一个英雄表格，增加一个edit来修改，再将修改后的信息，存储，展示
+
+修改展示的servlet
+
+```java
+	String trFormat = "<tr><td>%d</td><td>%s</td><td>%f</td><td>%d</td>" +
+               "<td><a href='deleteHeroid?id=%d'>delete</a></td>" +
+               "<td><a href='editHeroid?id=%d'>edit</a>" +
+               "</tr>\r\n";
+       for(Hero hero: heros){
+           String tr = String.format(trFormat, hero.getId(), hero.getName(), hero.getHp(), hero.getDamage(), hero.getId(), hero.getId());
+            sb.append(tr);
+       }	
+```
+
+```java
+package com.example.newgzwithjdbc;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.util.List;
+
+public class HelloListServlet extends HttpServlet {
+    HeroDao heroDao = new HeroDao();
+
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+       List<Hero> heros = heroDao.list();
+
+       StringBuffer sb = new StringBuffer();
+       sb.append("<table align='center' border='1' cellspacing='0'>\r\n");
+       sb.append("<tr><td>id</td><td>name</td><td>hp</td><td>damage</td></tr>\r\n");
+       String trFormat = "<tr><td>%d</td><td>%s</td><td>%f</td><td>%d</td>" +
+               "<td><a href='deleteHeroid?id=%d'>delete</a></td>" +
+               "<td><a href='editHeroid?id=%d'>edit</a>" +
+               "</tr>\r\n";
+       for(Hero hero: heros){
+           String tr = String.format(trFormat, hero.getId(), hero.getName(), hero.getHp(), hero.getDamage(), hero.getId(), hero.getId());
+            sb.append(tr);
+       }
+       sb.append("</table>");
+       resp.getWriter().print(sb.toString());
+    }
+}
+
+```
+
+每一次点击会调用不同的editHeroid？id=%d那么，首先是修改的servlet，能够获取修改后的信息
+
+```java
+package com.example.newgzwithjdbc;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
+public class HeroUpdateServlet extends HttpServlet {
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        HeroDao heroDao = new HeroDao();
+        Hero hero = heroDao.get(id);
+
+        StringBuffer sb = new StringBuffer();
+        resp.setContentType("text/html; charSet=UTF-8");
+        sb.append("<!DOCTYPE html>");
+
+        sb.append("<form action='updateHero' method='post'>");
+        sb.append("名字 ： <input type='text' name='name' value='%s' > <br>");
+        sb.append("血量 ： <input type='text' name='hp'  value='%f' > <br>");
+        sb.append("伤害： <input type='text' name='damage'  value='%d' > <br>");
+        sb.append("<input type='hidden' name='id' value='%d'>");
+        sb.append("<input type='submit' value='更新'>");
+        sb.append("</form>");
+
+        String html = String.format(sb.toString(), hero.getName(), hero.getHp(), hero.getDamage(), hero.getId());
+        resp.getWriter().write(html);
+    }
+}
+
+```
+
+在上面的表格中完成修改后，点击更新之后就会调用updateHero的action，那么要再编写能处理updateHero的servlet。
+
+```java
+package com.example.newgzwithjdbc;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
+public class HeroUpdateToServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HeroDao heroDao = new HeroDao();
+        Hero hero = new Hero();
+        hero.setId(Integer.parseInt(req.getParameter("id")));
+        hero.setName(req.getParameter("name"));
+        hero.setHp(Integer.parseInt(req.getParameter("hp")));
+        hero.setDamage(Integer.parseInt(req.getParameter("damage")));
+        heroDao.updateHero(hero);
+
+        resp.sendRedirect(req.getContextPath() + "/");
+    }
+}
+```
+
+在xml中进行配置
+
+```xml
+<servlet>
+    <servlet-name>HeroUpdateServlet</servlet-name>
+    <servlet-class>com.example.newgzwithjdbc.HeroUpdateServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>HeroUpdateServlet</servlet-name>
+    <url-pattern>/editHeroid</url-pattern>
+</servlet-mapping>
+
+<servlet>
+    <servlet-name>HeroUpdateToServlet</servlet-name>
+    <servlet-class>com.example.newgzwithjdbc.HeroUpdateToServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>HeroUpdateToServlet</servlet-name>
+    <url-pattern>/updateHero</url-pattern>
+</servlet-mapping>
+```
+
+## 效果
+
+初始页面（要的是逻辑，效果丑就丑点）
+
+![image-20231226144359248](../images/image-20231226144359248.png)
+
+添加数据
+
+![image-20231226144426177](../images/image-20231226144426177.png)
+
+查看数据
+
+![image-20231226144507734](../images/image-20231226144507734.png)
+
+删除id=11
+
+![image-20231226144522865](../images/image-20231226144522865.png)
+
+修改id=10
+
+![image-20231226144542424](../images/image-20231226144542424.png)
+
+![image-20231226144603734](../images/image-20231226144603734.png)
