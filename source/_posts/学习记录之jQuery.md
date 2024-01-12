@@ -537,8 +537,8 @@ jQuery 提供了一系列用于创建动画和效果的方法。以下是一些�
    - `hide(speed)`: 以指定速度隐藏元素。
    - `toggle(speed)`: 切换元素的显示和隐藏状态。
 
-   ```
-   javascriptCopy code$("div").show(1000); // 以1秒的速度显示 div 元素
+   ```JavaScript
+   $("div").show(1000); // 以1秒的速度显示 div 元素
    $("div").hide("slow"); // 以慢速度隐藏 div 元素
    $("div").toggle(500); // 以0.5秒的速度切换 div 元素的显示和隐藏状态
    ```
@@ -788,3 +788,67 @@ jQuery 提供了一系列用于创建动画和效果的方法。以下是一些�
        console.log("Page scrolled!");
    });
    ```
+
+# Ajax
+
+在 jQuery 中，你可以使用 `$.ajax()` 方法来执行 AJAX 请求。这个方法提供了一种简单且灵活的方式来发送异步 HTTP 请求。以下是一个基本的使用示例：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AJAX with jQuery</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+<script>
+  // 发送一个简单的 GET 请求
+  $.ajax({
+    url: 'https://jsonplaceholder.typicode.com/todos/1', // 请求的 URL
+    method: 'GET', // 请求方法
+    dataType: 'json', // 期望的数据类型
+    success: function(data) {
+      // 请求成功时的回调函数
+      console.log('Response:', data);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      // 请求失败时的回调函数
+      console.error('Error:', errorThrown);
+    }
+  });
+</script>
+
+</body>
+</html>
+```
+
+在这个例子中，`$.ajax()` 方法用于向 JSONPlaceholder 发送一个简单的 GET 请求。你可以根据实际需求调整 URL、请求方法、数据类型等参数。
+
+常见的 `$.ajax()` 方法参数包括：
+
+- `url`: 请求的 URL。
+- `method`: 请求方法，例如 'GET'、'POST' 等。
+- `data`: 发送到服务器的数据，可以是字符串或对象。
+- `dataType`: 期望的数据类型，例如 'json'、'html' 等。
+- `success`: 请求成功时的回调函数。
+- `error`: 请求失败时的回调函数。
+- 其他可选参数，如 `headers`、`contentType` 等。
+
+如果你想使用简化的方法，例如 `$.get()` 或 `$.post()`，也可以根据请求类型选择适当的方法。例如：
+
+```JavaScript
+// 使用 $.get() 发送 GET 请求
+$.get('https://jsonplaceholder.typicode.com/todos/1', function(data) {
+  console.log('Response:', data);
+});
+
+// 使用 $.post() 发送 POST 请求
+$.post('https://jsonplaceholder.typicode.com/posts', { title: 'foo', body: 'bar', userId: 1 }, function(data) {
+  console.log('Response:', data);
+});
+```
+
+这些方法提供了更简洁的语法，适用于特定类型的请求。
