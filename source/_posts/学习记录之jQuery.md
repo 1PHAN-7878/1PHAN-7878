@@ -852,3 +852,51 @@ $.post('https://jsonplaceholder.typicode.com/posts', { title: 'foo', body: 'bar'
 ```
 
 这些方法提供了更简洁的语法，适用于特定类型的请求。
+
+# trim
+
+```html
+<script>
+    $.trim("  Hello  ss!   ");
+</script>
+```
+
+去除首尾的空白。
+
+# JSON
+
+在 jQuery 中，可以使用 `$.parseJSON()` 方法将 JSON 字符串转换为 JavaScript 对象，而使用 `$.stringify()` 方法将 JavaScript 对象转换为 JSON 字符串。下面是简单的示例：
+
+1. **JSON字符串转为JavaScript对象：**
+
+   ```JavaScript
+   var jsonString = '{"name": "John", "age": 30, "city": "New York"}';
+   var jsonObject = $.parseJSON(jsonString);
+   
+   // 现在，jsonObject 就是一个 JavaScript 对象
+   console.log(jsonObject.name); // 输出: John
+   console.log(jsonObject.age);  // 输出: 30
+   console.log(jsonObject.city); // 输出: New York
+   ```
+
+2. **JavaScript对象转为JSON字符串：**
+
+   ```JavaScript
+   var jsonObject = {name: "John", age: 30, city: "New York"};
+   var jsonString = $.stringify(jsonObject);
+   
+   // 现在，jsonString 就是一个 JSON 字符串
+   console.log(jsonString); // 输出: {"name":"John","age":30,"city":"New York"}
+   ```
+
+请注意，在较新的 JavaScript 中，通常使用原生的 `JSON.parse()` 和 `JSON.stringify()` 来完成相同的任务。如果你不依赖于 jQuery 的其他功能，使用原生的 JSON 方法可能更为推荐。例如：
+
+```JavaScript
+// JSON字符串转为JavaScript对象
+var jsonString = '{"name": "John", "age": 30, "city": "New York"};
+var jsonObject = JSON.parse(jsonString);
+
+// JavaScript对象转为JSON字符串
+var jsonObject = {name: "John", age: 30, city: "New York"};
+var jsonString = JSON.stringify(jsonObject);
+```
