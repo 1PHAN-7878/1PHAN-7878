@@ -118,6 +118,23 @@ public class SpringMvcConfig {
 ```java
 package com.iphan.config;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+@Configuration
+@ComponentScan({"com.iphan.controller", "com.iphan.config"})
+@EnableWebMvc
+public class SpringMvcConfig {
+
+}
+```
+
+## 配置Servlet容器Config
+
+```java
+package com.iphan.config;
+
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
