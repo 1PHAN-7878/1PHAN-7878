@@ -123,3 +123,149 @@ tags: 前端
     </script>
 ```
 
+# 属性
+
+## 计算属性
+
+在Vue组件中定义计算属性。你可以在`computed`对象中定义一个或多个计算属性，每个属性的键是属性的名称，值是一个函数，用于计算属性的值。
+
+```JavaScript
+Vue.component('example-component', {
+  data() {
+    return {
+      // 数据
+      message: 'Hello',
+      // 其他数据...
+    }
+  },
+  computed: {
+    // 计算属性
+    reversedMessage() {
+      // 这里计算并返回基于message的反转字符串
+      return this.message.split('').reverse().join('');
+    }
+  }
+});
+```
+
+在模板中使用计算属性。你可以像使用普通的数据属性一样在模板中使用计算属性。
+
+```html
+<template>
+  <div>
+    <p>原始消息: {{ message }}</p>
+    <p>反转消息: {{ reversedMessage }}</p>
+  </div>
+</template>
+```
+
+## 监视属性
+
+在Vue.js中，你可以使用`watch`选项来监视Vue实例中的数据变化，并在数据发生变化时执行相应的操作。`watch`选项可以监听数据的变化，并在数据发生变化时执行自定义的回调函数。
+
+```javascript
+watch: {
+    // 监视message属性的变化
+    message(newValue, oldValue) {
+      // 在message属性发生变化时执行的操作
+      console.log('message属性发生了变化:', oldValue, '->', newValue);
+    }
+  }
+```
+
+在上面的示例中，我们定义了一个`watch`选项，其中包含一个名为`message`的属性。当`message`属性的值发生变化时，Vue将自动调用指定的回调函数，并传入两个参数：新值(`newValue`)和旧值(`oldValue`)。你可以在回调函数中执行任何你需要的操作，例如更新其他数据、发送请求或者执行其他逻辑。
+
+你也可以监视对象的变化，甚至是对象内部的某个属性的变化。例如：
+
+```javascript
+data() {
+    return {
+      user: {
+        name: 'John',
+        age: 30
+      }
+    }
+  },
+  watch: {
+    'user.age': function(newValue, oldValue) {
+      // 在user.age属性发生变化时执行的操作
+      console.log('user.age属性发生了变化:', oldValue, '->', newValue);
+    }
+  }
+```
+
+# 绑定样式
+
+## class
+
++ 传递对象
+
+  ```html
+  <div :class="{divClass: divistrue}"></div>
+  ```
+
+  上面的语法表示 `active` 这个 class 存在与否将取决于数据 property `isActive` 的 [truthiness](https://developer.mozilla.org/zh-CN/docs/Glossary/Truthy)。
+
++ 绑定的数据对象不必内联定义在模板里：
+
+  ```html
+  <div :class="divClassObj">哈哈</div>
+  ```
+
+  ```javascript
+  	data: {
+                  divClassObj:{
+                      divClass: true,
+                  },
+                  message: "aaa",
+                  name: 123,
+                  name2: "456",
+                  divistrue: true,
+              },
+  ```
+
+  通过Object内部的true和false来决定是否启用类。
+
++ 我们也可以在这里绑定一个返回对象的[计算属性](https://v2.cn.vuejs.org/v2/guide/computed.html)。这是一个常用且强大的模式
+
+  ```html
+  <div :class="divClassObjComputed"></div>
+  ```
+
+  计算属性里面返回的是一个类的对象包含true以及false
+
+  ```javascript
+  	divClassObjComputed: function() {
+                      return {divClass : 1 === 1}
+                  }
+  ```
+
+## style
+
++ 通过对象进行定义
+
++ 注意这里面的data并不可以乱写，而是css，value作为字符串
+
+  ```html
+  <div :style="styleObj">这是一段文字</div>
+  ```
+
+  ```javascript
+  data: {
+                  divClassObj:{
+                      divClass: true,
+                  },
+                  styleObj:{
+                      color: "blue",
+                  },
+                  divistrue: true,
+              },
+  ```
+
+  
+
+# 条件渲染
+
+`v-if` 指令用于条件性地渲染一块内容。这块内容只会在指令的表达式返回 truthy 值的时候被渲染。
+
+也可以用 `v-else` 添加一个“else 块”
